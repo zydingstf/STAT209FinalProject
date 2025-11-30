@@ -1,0 +1,7 @@
+pandas
+numpy
+pyarrow   # parquet support
+jupyter
+ipykernel
+matplotlib
+statsmodels
