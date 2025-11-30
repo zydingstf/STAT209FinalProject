@@ -1,0 +1,19 @@
+# IPUMS raw files
+data/
+*.dat
+*.dat.gz
+*.xml
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+
+# Python / Jupyter
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+
+# OS cruft
+.DS_Store
+
