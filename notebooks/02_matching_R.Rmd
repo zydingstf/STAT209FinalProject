@@ -1,0 +1,61 @@
+---
+title: "matching"
+output: html_document
+date: "2025-12-02"
+---
+
+```{r}
+# install.packages("readr")
+#install.packages("optmatch")
+#install.packages("RItools")
+#install.packages("plyr")
+#install.packages("rcbalance")
+#install.packages("ggplot2")
+
+library(DOS2)
+library(optmatch)
+library(RItools)
+library(plyr)
+library(rcbalance)
+library(ggplot2)
+library(dplyr)
+library(readr)
+library(tidyr)
+```
+
+```{r}
+df <- read_csv("../data/cleaned.csv")
+cleaned <- as.data.frame(df)
+# glimpse(df)
+# problems(df)
+covars <- c(
+  "AGE", "YEARS_IN_US",
+  "SEX", "RACE", "MARST",
+  "STATEFIP", "EDUC"
+)
+form <- as.formula(
+  paste("CITIZEN ~", paste(covars, collapse = " + "))
+)
+
+plot(xBalance(form, data = cleaned))
+```
+
+```{r}
+cat_vars <- c("SEX", "RACE", "MARST", "STATEFIP", "EDUC", "OCC", "IND")
+set.seed(42)
+cleaned_small <- cleaned %>%
+  sample_n(10000)
+cleaned_small <- cleaned_small %>%
+  filter(CITIZEN %in% c(0, 1)) %>%
+  drop_na(AGE, YEARS_IN_US, all_of(cat_vars)) %>%
+  mutate(
+    across(all_of(cat_vars), as.factor)
+  )
+z <- cleaned_small$CITIZEN
+X_mat <- model.matrix(
+  ~ AGE + YEARS_IN_US + SEX + RACE + MARST + STATEFIP + EDUC + OCC + IND - 1,
+  data = cleaned_small
+)
+dim(X_mat)
+mat.all <- smahal(z, X_mat)
+```
