@@ -61,6 +61,6 @@ ipums_clean <- ipums_sel %>%
   filter(AGE >= 18, AGE <= 65)
 
 # 5. Save to Parquet for use in both R and Python
-write_parquet(ipums_clean, "Desktop/STAT209FinalProject/data/usa_00001_clean.parquet")
+write_parquet(ipums_clean, "data/usa_00001_clean.parquet")
 
 print(ipums_clean %>% select(YEAR, CITIZEN, INCWAGE) %>% head())
